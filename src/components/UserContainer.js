@@ -6,11 +6,8 @@ import EmployeeDetail from "./EmployeeDetail";
 import API from "../utils/API";
 //import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table'; 
-//import Button from 'react-bootstrap/Button';
-//import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 
 class UserContainer extends Component {
   state = {
@@ -32,6 +29,20 @@ class UserContainer extends Component {
       .catch(err => console.log(err));
 
   };
+
+  compareBy(key) {
+    return function (a, b) {
+      if (a[key] < b[key]) return -1;
+      if (a[key] > b[key]) return 1;
+      return 0;
+    };
+  }
+ 
+  sortBy(key) {
+    let arrayCopy = [...this.state.results];
+    arrayCopy.sort(this.compareBy(key));
+    this.setState({results: arrayCopy});
+  }
 
   handleInputChange = event => {
     const value = event.target.value;
@@ -57,10 +68,10 @@ class UserContainer extends Component {
                 handleInputChange={this.handleInputChange}
               />
       <Table striped bordered hover>
-      <thead>
-      <tr>
+      <thead> 
+              <tr>
       <th>Picture</th>
-      <th>Name</th>    
+      <th onClick = {() => this.sortBy("name")} >Name</th>   
       <th>Email</th> 
       </tr>
       </thead>
@@ -68,22 +79,21 @@ class UserContainer extends Component {
            {this.state.results.length> 0 && this.state.results.filter(user => 
             user.name.first.includes(this.state.search)).map(user=>  
 
-              <EmployeeDetail name={user.name.first + " " + user.name.last}
+              <EmployeeDetail 
+              name={user.name.first + " " + user.name.last}
               email={user.email }
-              pic = {user.picture.thumbnail }>
-
-              </EmployeeDetail>
-            )
-              // ) : (
-              //   // <h3>No Results to Display</h3>
-          }
-        </tbody>
- 
+              pic = {user.picture.thumbnail}
+              
+              ></EmployeeDetail>
+          
+            )}
+             
+             </tbody>
               </Table>
   
     </Col> 
      <Col>
-     
+  
      </Col>
       </Row>
       </Container>

@@ -1,10 +1,11 @@
 import React from "react";
+//import { getBsProps } from "react-bootstrap/lib/utils/bootstrapUtils";
 
 function EmployeeDetail(props) {
   return (
     <tr className="text-center">
-      <td> Thumbnail: {props.thumbnail}</td>
-      <td>Employee: {props.name}</td>
+      <td><img src = {props.pic} alt = "employee photos"></img></td>
+      <td>{props.name}</td>
       <td>Email: {props.email}</td>
     </tr>
   );
