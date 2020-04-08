@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 class UserContainer extends Component {
+  
   state = {
     results: {},
     search: ""
@@ -27,20 +28,17 @@ class UserContainer extends Component {
         this.setState({ results: res.data.results}, () => console.log(this.state.results))
       })
       .catch(err => console.log(err));
-
   };
 
-  compareBy(key) {
-    return function (a, b) {
-      if (a[key] < b[key]) return -1;
-      if (a[key] > b[key]) return 1;
-      return 0;
-    };
-  }
- 
+
   sortBy(key) {
     let arrayCopy = [...this.state.results];
-    arrayCopy.sort(this.compareBy(key));
+    arrayCopy.sort((function (a, b) {
+      if (a.name[key] < b.name[key]) return -1;
+      if (a.name[key] > b.name[key]) return 1;
+      return 0;
+    
+    }))
     this.setState({results: arrayCopy});
   }
 
@@ -62,7 +60,7 @@ class UserContainer extends Component {
       <Container>
       <Row>
       <Col></Col>
-      <Col>
+      <Col sm={10}>
       <SearchForm
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
@@ -71,13 +69,14 @@ class UserContainer extends Component {
       <thead> 
               <tr>
       <th>Picture</th>
-      <th onClick = {() => this.sortBy("name")} >Name</th>   
+      <th onClick = {() => this.sortBy("last")} >Name</th>
+      {/* <th onClick = {() => this.reverse("last")} >Name</th>    */}
       <th>Email</th> 
       </tr>
       </thead>
       <tbody>
            {this.state.results.length> 0 && this.state.results.filter(user => 
-            user.name.first.includes(this.state.search)).map(user=>  
+            user.name.first.includes(this.state.search)).map((user)=> (
 
               <EmployeeDetail 
               name={user.name.first + " " + user.name.last}
@@ -86,7 +85,7 @@ class UserContainer extends Component {
               
               ></EmployeeDetail>
           
-            )}
+            ))}
              
              </tbody>
               </Table>
@@ -100,5 +99,4 @@ class UserContainer extends Component {
     )
   }
 }
-
 export default UserContainer;
